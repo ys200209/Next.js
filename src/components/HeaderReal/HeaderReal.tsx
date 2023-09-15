@@ -1,3 +1,4 @@
+"use client"
 import {
     createStyles,
     Header,
@@ -123,7 +124,7 @@ const mockdata = [
     },
 ];
 
-export function HeaderMegaMenu() {
+export default function HeaderMegaMenu() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
     const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
     const { classes, theme } = useStyles();
