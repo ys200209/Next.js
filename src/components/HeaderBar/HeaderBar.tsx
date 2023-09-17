@@ -1,35 +1,38 @@
 "use client"
+
 import {
-    createStyles,
-    Header,
-    HoverCard,
-    Group,
-    Button,
-    UnstyledButton,
-    Text,
-    SimpleGrid,
-    ThemeIcon,
     Anchor,
-    Divider,
-    Center,
     Box,
     Burger,
-    Drawer,
+    Button,
+    Center,
     Collapse,
-    ScrollArea,
+    createStyles,
+    Divider,
+    Drawer,
+    Group,
+    Header,
+    HoverCard,
     rem,
+    ScrollArea,
+    SimpleGrid,
+    Text,
+    ThemeIcon,
+    UnstyledButton,
 } from '@mantine/core';
-import { MantineLogo } from '@mantine/ds';
-import { useDisclosure } from '@mantine/hooks';
+import {MantineLogo} from '@mantine/ds';
+import {useDisclosure} from '@mantine/hooks';
 import {
-    IconNotification,
-    IconCode,
     IconBook,
     IconChartPie3,
-    IconFingerprint,
-    IconCoin,
     IconChevronDown,
+    IconCode,
+    IconCoin,
+    IconFingerprint,
+    IconNotification,
 } from '@tabler/icons-react';
+import Link from "next/link";
+import OpenLoginModal from "@/components/OpenLoginModal/OpenLoginModal";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -124,16 +127,16 @@ const mockdata = [
     },
 ];
 
-export default function HeaderMegaMenu() {
-    const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-    const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
-    const { classes, theme } = useStyles();
+export default function HeaderBar() {
+    const [drawerOpened, {toggle: toggleDrawer, close: closeDrawer}] = useDisclosure(false);
+    const [linksOpened, {toggle: toggleLinks}] = useDisclosure(false);
+    const {classes, theme} = useStyles();
 
     const links = mockdata.map((item) => (
         <UnstyledButton className={classes.subLink} key={item.title}>
             <Group noWrap align="flex-start">
                 <ThemeIcon size={34} variant="default" radius="md">
-                    <item.icon size={rem(22)} color={theme.fn.primaryColor()} />
+                    <item.icon size={rem(22)} color={theme.fn.primaryColor()}/>
                 </ThemeIcon>
                 <div>
                     <Text size="sm" fw={500}>
@@ -147,16 +150,22 @@ export default function HeaderMegaMenu() {
         </UnstyledButton>
     ));
 
-    return (
-        <Box pb={120}>
-            <Header height={60} px="md">
-                <Group position="apart" sx={{ height: '100%' }}>
-                    <MantineLogo size={30} />
+    function handleLoginModal() {
 
-                    <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
-                        <a href="#" className={classes.link}>
+    }
+
+    return (
+        <Box pb={30}>
+            <Header height={60} px="md">
+                <Group position="apart" sx={{height: '100%'}}>
+                    <Link href="/">
+                        <MantineLogo size={30}/>
+                    </Link>
+
+                    <Group sx={{height: '100%'}} spacing={0} className={classes.hiddenMobile}>
+                        <Link href="/" className={classes.link}>
                             Home
-                        </a>
+                        </Link>
                         <HoverCard width={600} position="bottom" radius="md" shadow="md" withinPortal>
                             <HoverCard.Target>
                                 <a href="#" className={classes.link}>
@@ -164,12 +173,12 @@ export default function HeaderMegaMenu() {
                                         <Box component="span" mr={5}>
                                             Features
                                         </Box>
-                                        <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+                                        <IconChevronDown size={16} color={theme.fn.primaryColor()}/>
                                     </Center>
                                 </a>
                             </HoverCard.Target>
 
-                            <HoverCard.Dropdown sx={{ overflow: 'hidden' }}>
+                            <HoverCard.Dropdown sx={{overflow: 'hidden'}}>
                                 <Group position="apart" px="md">
                                     <Text fw={500}>Features</Text>
                                     <Anchor href="#" fz="xs">
@@ -211,11 +220,16 @@ export default function HeaderMegaMenu() {
                     </Group>
 
                     <Group className={classes.hiddenMobile}>
-                        <Button variant="default">Log in</Button>
-                        <Button>Sign up</Button>
+                        {/*<ColorSchemeToggleBar />*/}
+                        <Link href="/login">
+                            <Button variant="default">Log in</Button>
+                        </Link>
+                        <Link href="/register">
+                            <Button>Sign up</Button>
+                        </Link>
                     </Group>
 
-                    <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
+                    <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop}/>
                 </Group>
             </Header>
 
@@ -229,7 +243,7 @@ export default function HeaderMegaMenu() {
                 zIndex={1000000}
             >
                 <ScrollArea h={`calc(100vh - ${rem(60)})`} mx="-md">
-                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
+                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}/>
 
                     <a href="#" className={classes.link}>
                         Home
@@ -239,7 +253,7 @@ export default function HeaderMegaMenu() {
                             <Box component="span" mr={5}>
                                 Features
                             </Box>
-                            <IconChevronDown size={16} color={theme.fn.primaryColor()} />
+                            <IconChevronDown size={16} color={theme.fn.primaryColor()}/>
                         </Center>
                     </UnstyledButton>
                     <Collapse in={linksOpened}>{links}</Collapse>
@@ -250,10 +264,12 @@ export default function HeaderMegaMenu() {
                         Academy
                     </a>
 
-                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
+                    <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'}/>
 
                     <Group position="center" grow pb="xl" px="md">
-                        <Button variant="default">Log in</Button>
+                        <Link href="/register">
+                            <Button variant="default">Log in</Button>
+                        </Link>
                         <Button>Sign up</Button>
                     </Group>
                 </ScrollArea>
