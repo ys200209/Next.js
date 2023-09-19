@@ -1,42 +1,45 @@
-import { useState } from 'react';
-import NextApp, { AppProps, AppContext } from 'next/app';
-import { getCookie, setCookie } from 'cookies-next';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
+import { MantineProvider } from '@mantine/core';
 
-export default function App(props: AppProps & { colorScheme: ColorScheme }) {
+export default function App(props: AppProps) {
     const { Component, pageProps } = props;
-    const [colorScheme, setColorScheme] = useState<ColorScheme>(props.colorScheme);
 
-    const toggleColorScheme = (value?: ColorScheme) => {
-        const nextColorScheme = value || (colorScheme === 'dark' ? 'light' : 'dark');
-        setColorScheme(nextColorScheme);
-        setCookie('mantine-color-scheme', nextColorScheme, { maxAge: 60 * 60 * 24 * 30 });
-    };
+    // 커스텀 테마 생성
+    /*const theme = createTheme({
+        colorScheme: 'dark', // 초기 컬러 스키마 설정
+        primaryColor: '#FF5733', // 원하는 색상으로 변경
+        black: '#333', // 원하는 색상으로 변경
+        // 추가적인 테마 설정...
+    });*/
 
     return (
         <>
             <Head>
-                <title>Mantine next example</title>
+                <title>Page title</title>
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-                <link rel="shortcut icon" href="/favicon.svg" />
             </Head>
 
-            <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-                <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-                    <Component {...pageProps} />
-                    <Notifications />
-                </MantineProvider>
-            </ColorSchemeProvider>
+            <MantineProvider theme={{
+                colorScheme: 'dark',
+                colors: {
+                    // override dark colors to change them for all components
+                    dark: [
+                        '#d5d7e0',
+                        '#acaebf',
+                        '#8c8fa3',
+                        '#666980',
+                        '#4d4f66',
+                        '#34354a',
+                        '#2b2c3d',
+                        '#1d1e30',
+                        '#0c0d21',
+                        '#01010a',
+                    ],
+                },
+            }} withGlobalStyles withNormalizeCSS>
+                <Component {...pageProps} />
+            </MantineProvider>
         </>
     );
 }
-
-App.getInitialProps = async (appContext: AppContext) => {
-    const appProps = await NextApp.getInitialProps(appContext);
-    return {
-        ...appProps,
-        colorScheme: getCookie('mantine-color-scheme', appContext.ctx) || 'dark',
-    };
-};
