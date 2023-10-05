@@ -33,6 +33,9 @@ import {
 } from '@tabler/icons-react';
 import Link from "next/link";
 import OpenLoginModal from "@/components/OpenLoginModal/OpenLoginModal";
+import ColorSchemeTemplate from "@/components/ColorSchemeTemplate/ColorSchemeTemplate";
+import ColorSchemeToggleBar from "@/components/ColorSchemeTemplate/ColorSchemeToggleBar/ColorSchemeToggleBar";
+import Toggle from "@/components/Toggle/Toggle";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -150,10 +153,6 @@ export default function HeaderBar() {
         </UnstyledButton>
     ));
 
-    function handleLoginModal() {
-
-    }
-
     return (
         <Box pb={30}>
             <Header height={60} px="md">
@@ -162,7 +161,7 @@ export default function HeaderBar() {
                         <MantineLogo size={30}/>
                     </Link>
 
-                    <Group sx={{height: '100%'}} spacing={0} className={classes.hiddenMobile}>
+                    <Group sx={{height: '100%'}} spacing={0} className={classes.hiddenMobile} ml={150}>
                         <Link href="/" className={classes.link}>
                             Home
                         </Link>
@@ -220,7 +219,7 @@ export default function HeaderBar() {
                     </Group>
 
                     <Group className={classes.hiddenMobile}>
-                        {/*<ColorSchemeToggleBar />*/}
+                        <Toggle />
                         <Link href="/login">
                             <Button variant="default">Log in</Button>
                         </Link>

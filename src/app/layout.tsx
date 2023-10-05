@@ -4,6 +4,7 @@ import './globals.css'
 import React, {useState} from "react";
 import {ColorScheme, ColorSchemeProvider, MantineProvider} from "@mantine/core";
 import HeaderBar from "@/components/HeaderBar/HeaderBar";
+import {SessionProvider} from "next-auth/react";
 
 export default function RootLayout({children}: { children: any }) {
     const [colorScheme, setColorScheme] = useState<ColorScheme>('light');
@@ -17,6 +18,9 @@ export default function RootLayout({children}: { children: any }) {
             <script src="https://cdnjs.com/libraries/Chart.js"></script>
         </head>
         <body>
+        {/*<SessionProvider>
+        </SessionProvider>*/}
+
         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
             <MantineProvider theme={{colorScheme}} withGlobalStyles withNormalizeCSS>
                 <HeaderBar />
