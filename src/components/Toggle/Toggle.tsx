@@ -1,11 +1,11 @@
-import { useMantineColorScheme, SegmentedControl, Group, Center, Box } from '@mantine/core';
-import { IconSun, IconMoon } from '@tabler/icons-react';
+import {Box, Center, Group, SegmentedControl, useMantineColorScheme} from '@mantine/core';
+import {IconMoon, IconSun} from '@tabler/icons-react';
 
-export default function SegmentedToggle() {
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+export default function Toggle() {
+    const {colorScheme, toggleColorScheme} = useMantineColorScheme();
 
     return (
-        <Group position="center" my="xl">
+        <Group position="center" my="xs">
             <SegmentedControl
                 value={colorScheme}
                 onChange={(value: 'light' | 'dark') => toggleColorScheme(value)}
@@ -14,7 +14,7 @@ export default function SegmentedToggle() {
                         value: 'light',
                         label: (
                             <Center>
-                                <IconSun size="1rem" stroke={1.5} />
+                                <IconSun size="1rem" stroke={1.5}/>
                                 <Box ml={10}>Light</Box>
                             </Center>
                         ),
@@ -23,7 +23,7 @@ export default function SegmentedToggle() {
                         value: 'dark',
                         label: (
                             <Center>
-                                <IconMoon size="1rem" stroke={1.5} />
+                                <IconMoon size="1rem" stroke={1.5}/>
                                 <Box ml={10}>Dark</Box>
                             </Center>
                         ),
