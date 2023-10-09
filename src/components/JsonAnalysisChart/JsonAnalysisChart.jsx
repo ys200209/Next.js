@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import * as go from 'gojs';
 import Chart from 'chart.js/auto';
 
-export default function CanvasJs() {
+export default function JsonAnalysisChart() {
     const styleOptions = {
         width: "100%",
         height: "500px",
@@ -22,12 +22,13 @@ export default function CanvasJs() {
     );
 }
 
-function init() {
-
+async function init() {
+    // Since 2.2 you can also author concise templates with method chaining instead of GraphObject.make
+    // For details, see https://gojs.net/latest/intro/buildingObjects.html
     const $ = go.GraphObject.make;
 
     const myDiagram =
-        new go.Diagram("myDiagramDiv",
+        new go.Diagram("myCanvases",
             {
                 layout: $(go.TreeLayout)
             });
@@ -46,25 +47,39 @@ function init() {
                 new go.Binding("text"))
         );
 
+    async function getUsers() {
+        return await fetch('http://localhost:9999/users')
+    }
 
+    let response = await getUsers();
+    const users = await response.json();
+
+    // This Binding conversion function creates a Canvas element for a Picture
+    // that has a rendering of a line chart drawn by Chart.js.
     function makeLineChart(datasets, picture) {
-        let canvases = document.getElementById("myCanvases");
+        var canvases = document.getElementById("myCanvases");
 
-        let canv = document.createElement("canvas");
-        canv.width = canv.style.width = "400px";
-        canv.height = canv.style.height = "200px";
+        const canv = document.createElement("canvas");
+        canv.width = canv.style.width = "100%";
+        canv.height = canv.style.height = "500px";
 
         // apparently Chart.js expects the Canvas to be in a DIV
         var div = document.createElement("div");
-        div.style.position = "absolute";
+        // div.style.position = "absolute";
+        div.style.position = "relative";
         div.appendChild(canv);
         // add the DIV/Canvas to the DOM, temporarily
         canvases.appendChild(div);
 
+        let labels = [...new Set(users.map(user => user.job))];
+
+        console.log('labels: ', labels);
+        console.log('datasets: ', datasets);
+
         var config = {  // Chart.js configuration, including the DATASETS data from the model data
             type: "line",
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: labels,
                 datasets: datasets
             },
             options: {
@@ -83,7 +98,23 @@ function init() {
 
         new Chart(canv, config);
 
-        return canv;
+        // return canv;
+    }
+
+    function getCountPointsByGender(gender) {
+        let userByGender = users.filter(user => user.gender === gender);
+
+        const countByJob = userByGender.reduce((groups, user) => {
+            const job = user.job;
+            if (!groups[job]) {
+                groups[job] = [0];
+            }
+            groups[job]++;
+            return groups;
+        });
+        const jobGroup = [...new Set(users.map(user => user.job))];
+        let result = jobGroup.map(job => countByJob[job] || 0);
+        return result;
     }
 
     myDiagram.model = new go.GraphLinksModel(
@@ -93,44 +124,22 @@ function init() {
             nodeDataArray:
                 [
                     {
-                        key: 1, text: "Alpha",
+                        key: 1, text: "", color: "white",
                         datasets: [{
-                            label: "Random data",
-                            borderColor: "black",
-                            data: makeRandomPoints(8, 10)
-                        }]
-                    },
-                    {
-                        key: 2, text: "Beta",
-                        datasets: [{
-                            label: "First dataset",
-                            fill: false,
-                            backgroundColor: "red",
-                            borderColor: "red",
-                            data: makeRandomPoints(8)
-                        }, {
-                            label: "Second dataset",
+                            label: "남자",
                             fill: false,
                             backgroundColor: "blue",
                             borderColor: "blue",
-                            data: makeRandomPoints(8)
-                        }]
-                    },
-                    {
-                        key: 3, text: "Gamma", color: "green",
-                        datasets: [{
-                            label: "some data",
+                            data: getCountPointsByGender('male')
+                        }, {
+                            label: "여자",
                             fill: false,
-                            backgroundColor: "green",
-                            borderColor: "green",
-                            data: makeRandomPoints()
+                            backgroundColor: "red",
+                            borderColor: "red",
+                            data: getCountPointsByGender('female')
                         }]
                     }
-                ],
-            linkDataArray: [
-                {from: 1, to: 2},
-                {from: 1, to: 3}
-            ]
+                ]
         });
 }
 
@@ -161,7 +170,7 @@ function addNode() {
         };
         m.addNodeData(data);
         if (firstnode) {
-            m.addLinkData({from: firstnode.key, to: m.getKeyForNodeData(data)});
+            m.addLinkData({ from: firstnode.key, to: m.getKeyForNodeData(data) });
             // new node starts off at same location as the parent node
             var newnode = myDiagram.findNodeForData(data);
             if (newnode) newnode.location = firstnode.location;
@@ -185,3 +194,4 @@ function modifyNodes() {
         });
     }, "modified selected nodes");
 }
+
