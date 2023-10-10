@@ -23,9 +23,6 @@ export default function Users() {
         }
     }
 
-    // const response = await fetch(`http://localhost:9999/users`, options);
-    // const users = await response.json();
-
     useEffect(() => {
         const fetchData = async () => {
             try {
