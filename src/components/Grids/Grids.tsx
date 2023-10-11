@@ -45,7 +45,7 @@ export default function Grids() {
             <Container my="xl">
                 <SimpleGrid cols={1} spacing="md" breakpoints={[{maxWidth: 'xl', cols: 1}]}>
                     <Grid gutter="sm">
-                        <Grid.Col span={4}>x`
+                        <Grid.Col span={4}>
                             {isLoading ? (
                                 <Skeleton height={TERTIARY_COL_HEIGHT} radius="md" animate={true}>
                                 </Skeleton>
